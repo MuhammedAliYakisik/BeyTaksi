@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:izmir_taksi/data/model/Taksi.dart';
+import 'package:izmir_taksi/ui/cubit/AnaSayfa_cubit.dart';
 import 'package:izmir_taksi/ui/views/SearchPage.dart';
 import 'package:izmir_taksi/ui/views/SettingsPage.dart';
-import 'package:izmir_taksi/ui/views/SplashScreen.dart';
 import 'package:izmir_taksi/utils/color.dart';
-import 'package:motion_tab_bar/MotionBadgeWidget.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
 
@@ -17,6 +19,13 @@ class Anasayfa extends StatefulWidget {
 
 class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
   MotionTabBarController? _motionTabBarController;
+  bool _isLoading = true;
+
+  Future<void> _changeloading() async {
+    setState(() {
+      _isLoading = !_isLoading;
+    });
+  }
 
   @override
   void initState() {
@@ -26,6 +35,13 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
       length: 3,
       vsync: this,
     );
+    _fetchCats();
+  }
+
+  Future<void> _fetchCats() async {
+    await _changeloading();
+    await context.read<AnasayfaCubit>().fetchtaksi();
+    await _changeloading();
   }
 
   @override
@@ -38,7 +54,6 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var oran = MediaQuery.of(context);
     var genislik = oran.size.width;
-    var uzunluk = oran.size.height;
 
     return Scaffold(
       backgroundColor: white,
@@ -60,42 +75,11 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
         ),
       ),
       bottomNavigationBar: MotionTabBar(
-        controller: _motionTabBarController, // ADD THIS if you need to change your tab programmatically
+        controller: _motionTabBarController,
         initialSelectedTab: "Home",
-        labels: const ["Home", "Search", "Settings"], // Dashboard'ı kaldır
-        icons: const [Icons.home, Icons.search, Icons.settings], // Dashboard'ı kaldır
-
-        // optional badges, length must be same with labels
-        badges: [
-          // Default Motion Badge Widget
-          const MotionBadgeWidget(
-            text: '10+',
-            textColor: Colors.white, // optional, default to Colors.white
-            color: Colors.black, // optional, default to Colors.red
-            size: 18, // optional, default to 18
-          ),
-
-          // custom badge Widget
-          Container(
-            color: Colors.black,
-            padding: const EdgeInsets.all(2),
-            child: const Text(
-              '+10',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-              ),
-            ),
-          ),
-
-          // Default Motion Badge Widget with indicator only
-          const MotionBadgeWidget(
-            isIndicator: true,
-            color: yellow, // optional, default to Colors.red
-            size: 5, // optional, default to 5,
-            show: true, // true / false
-          ),
-        ],
+        labels: const ["Home", "Search", "Settings"],
+        icons: const [Icons.home, Icons.search, Icons.settings],
+        badges: null,
         tabSize: 50,
         tabBarHeight: 55,
         textStyle: const TextStyle(
@@ -119,9 +103,44 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
         physics: NeverScrollableScrollPhysics(),
         controller: _motionTabBarController,
         children: <Widget>[
-          const Center(
-            child: Text("Home"),
-          ),
+          BlocBuilder<AnasayfaCubit, List<Taksi>>(
+              builder: (context, taksilist) {
+                if (_isLoading) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SpinKitFadingCircle(color: yellow2, size: 50.0),
+                        SizedBox(height: 10),
+                        Text(
+                          'Veriler Yükleniyor...',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if (taksilist.isNotEmpty) {
+                  return ListView.builder(
+                      itemCount: taksilist.length,
+                      itemBuilder: (context, indeks) {
+                        var taksi = taksilist[indeks];
+
+                        return ListTile(
+                          leading: Text("${taksi.iLCE}"),
+                        );
+                      });
+                } else {
+                  return Center(
+                    child: Text(
+                      "Veriler yüklenemedi.",
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  );
+                }
+              }),
           const Searchpage(),
           const Settingspage(),
         ],
