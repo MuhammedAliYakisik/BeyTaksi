@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:izmir_taksi/data/model/Taksi.dart';
 
@@ -9,20 +10,25 @@ class TaksiRepo {
   Future<List<Taksi>> fetchitems() async {
     try {
       final response = await Dio().get(_baseurl);
-      if(response.statusCode == 200) {
-        final _datas =response.data;
-        if(_datas is List){
-          _items = _datas.map((e)=> Taksi.fromJson(e)).toList();
-        }
 
-      }else {
-        throw Exception("failed load data");
+      final data = response.data;
+
+      List<dynamic> jsonData;
+
+      if (data is String) {
+        jsonData = json.decode(data);
+
+      } else if (data is List) {
+        jsonData = data;
+
+      } else {
+        throw Exception("Beklenmeyen veri formatı");
       }
 
-    }catch(e) {
-      print("hata $e");
+      _items = jsonData.map((e) => Taksi.fromJson(e)).toList();
+    } catch (e) {
+      print("Hata: $e");
     }
     return _items ?? [];
   }
-
 }
