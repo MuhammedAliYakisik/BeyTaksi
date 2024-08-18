@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,7 @@ class Anasayfa extends StatefulWidget {
 
 class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
   MotionTabBarController? _motionTabBarController;
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   Future<void> _changeloading() async {
     setState(() {
@@ -35,13 +36,14 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
       length: 3,
       vsync: this,
     );
-    _fetchCats();
+    _fetchTaksi();
   }
 
-  Future<void> _fetchCats() async {
+  Future<void> _fetchTaksi() async {
     await _changeloading();
     await context.read<AnasayfaCubit>().fetchtaksi();
     await _changeloading();
+
   }
 
   @override
@@ -104,43 +106,74 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
         controller: _motionTabBarController,
         children: <Widget>[
           BlocBuilder<AnasayfaCubit, List<Taksi>>(
-              builder: (context, taksilist) {
-                if (_isLoading) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SpinKitFadingCircle(color: yellow2, size: 50.0),
-                        SizedBox(height: 10),
-                        Text(
-                          'Veriler Yükleniyor...',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
+            builder: (context, taksilist) {
+              print("taksi: $taksilist");
+              if (_isLoading) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SpinKitFadingCircle(
+                        color: Colors.yellow,
+                        size: 50.0,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Veriler Yükleniyor...',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else if(taksilist.isNotEmpty){
+                return ListView.builder(
+                  itemCount: taksilist.length,
+                  itemBuilder: (context, indeks) {
+                    var taksi = taksilist[indeks];
+                    return Card(
+                      elevation: 10.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 80,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Text( "${taksi.title?? 'boş title'}",
+                                    style: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontSize: 30.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                } else if (taksilist.isNotEmpty) {
-                  return ListView.builder(
-                      itemCount: taksilist.length,
-                      itemBuilder: (context, indeks) {
-                        var taksi = taksilist[indeks];
+                      ),
+                    );
+                  },
+                );
+              }else {
+                return Center(
+                  child: Text(
+                    "Veriler yüklenemedi.",
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                );
+              }
+            },
+          ),
 
-                        return ListTile(
-                          leading: Text("${taksi.iLCE}"),
-                        );
-                      });
-                } else {
-                  return Center(
-                    child: Text(
-                      "Veriler yüklenemedi.",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                  );
-                }
-              }),
+
+
           const Searchpage(),
           const Settingspage(),
         ],
