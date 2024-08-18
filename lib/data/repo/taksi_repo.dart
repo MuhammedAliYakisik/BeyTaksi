@@ -4,7 +4,7 @@ import 'package:izmir_taksi/data/model/Taksi.dart';
 class TaksiRepo {
   List<Taksi>? _items;
 
-  final _baseurl = "https://openapi.izmir.bel.tr/api/ibb/cbs/taksiduraklari";
+  final _baseurl = "https://acikveri.beyoglu.bel.tr/api/c0358-d8851";
 
   Future<List<Taksi>> fetchitems() async {
     try {
