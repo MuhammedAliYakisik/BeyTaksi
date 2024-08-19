@@ -79,7 +79,7 @@ class _SplashscreenState extends State<Splashscreen> with TickerProviderStateMix
             FadeTransition(
               opacity: _textOpacityAnimation,
               child: Text(
-                '~ Bey Taksi ~',
+                '~ Konya Taksi ~',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 40,
