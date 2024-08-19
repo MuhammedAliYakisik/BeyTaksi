@@ -61,7 +61,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
       backgroundColor: white,
       appBar: AppBar(
         title: Text(
-          "~ İzmir Taksi ~",
+          "~ Bey Taksi ~",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: genislik / 15,
@@ -149,7 +149,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                                   Text( "${taksi.title?? 'boş title'}",
                                     style: TextStyle(
                                         color: Colors.blueAccent,
-                                        fontSize: 30.0,
+                                        fontSize: 20.0,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
