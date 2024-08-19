@@ -1,56 +1,126 @@
 class Taksi {
-  String? id;
-  String? qrCode;
-  String? categoryId;
-  String? categoryName;
-  String? title;
-  String? seotitle;
-  String? description;
-  String? image;
-  String? lat;
-  String? lng;
-  String? rate;
+  List<Data>? data;
 
-  Taksi(
-      {this.id,
-        this.qrCode,
-        this.categoryId,
-        this.categoryName,
-        this.title,
-        this.seotitle,
-        this.description,
-        this.image,
-        this.lat,
-        this.lng,
-        this.rate});
+  Taksi({this.data});
 
   Taksi.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    qrCode = json['qr_code'];
-    categoryId = json['category_id'];
-    categoryName = json['category_name'];
-    title = json['title'];
-    seotitle = json['seotitle'];
-    description = json['description'];
-    image = json['image'];
-    lat = json['lat'];
-    lng = json['lng'];
-    rate = json['rate'];
+    if (json['data'] != null) {
+      data = [];
+      json['data'].forEach((v) {
+        data!.add(Data.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['qr_code'] = this.qrCode;
-    data['category_id'] = this.categoryId;
-    data['category_name'] = this.categoryName;
+    final Map<String, dynamic> data = {};
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
+  String? title;
+  int? totalCount;
+  List<SubCategories>? subCategories;
+
+  Data({this.title, this.totalCount, this.subCategories});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    totalCount = json['total_count'];
+    if (json['sub_categories'] != null) {
+      subCategories = [];
+      json['sub_categories'].forEach((v) {
+        subCategories!.add(SubCategories.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
     data['title'] = this.title;
-    data['seotitle'] = this.seotitle;
-    data['description'] = this.description;
-    data['image'] = this.image;
+    data['total_count'] = this.totalCount;
+    if (this.subCategories != null) {
+      data['sub_categories'] =
+          this.subCategories!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class SubCategories {
+  String? title;
+  int? totalCount;
+  List<Contents>? contents;
+
+  SubCategories({this.title, this.totalCount, this.contents});
+
+  SubCategories.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    totalCount = json['total_count'];
+    if (json['contents'] != null) {
+      contents = [];
+      json['contents'].forEach((v) {
+        contents!.add(Contents.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['title'] = this.title;
+    data['total_count'] = this.totalCount;
+    if (this.contents != null) {
+      data['contents'] = this.contents!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Contents {
+  String? title;
+  String? address;
+  Location? location;
+
+  Contents({this.title, this.address, this.location});
+
+  Contents.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    address = json['address'];
+    location = json['location'] != null
+        ? Location.fromJson(json['location'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['title'] = this.title;
+    data['address'] = this.address;
+    if (this.location != null) {
+      data['location'] = this.location!.toJson();
+    }
+    return data;
+  }
+}
+
+class Location {
+  double? lat;
+  double? lon;
+
+  Location({this.lat, this.lon});
+
+  Location.fromJson(Map<String, dynamic> json) {
+    lat = json['lat'];
+    lon = json['lon'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
     data['lat'] = this.lat;
-    data['lng'] = this.lng;
-    data['rate'] = this.rate;
+    data['lon'] = this.lon;
     return data;
   }
 }
