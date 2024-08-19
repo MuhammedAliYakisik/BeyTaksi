@@ -4,6 +4,8 @@ import 'package:izmir_taksi/ui/cubit/AnaSayfa_cubit.dart';
 import 'package:izmir_taksi/ui/views/AnaSayfa.dart';
 import 'package:izmir_taksi/ui/views/SplashScreen.dart';
 
+import 'data/repo/taksi_repo.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,7 +17,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AnasayfaCubit()),
+        BlocProvider(
+          create: (context) => AnasayfaCubit(TaksiRepo()), // TaksiRepo'yu buraya geçmelisiniz
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -24,7 +28,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: Splashscreen()
+        home: Splashscreen(),
       ),
     );
   }
