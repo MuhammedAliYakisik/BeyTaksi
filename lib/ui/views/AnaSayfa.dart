@@ -43,7 +43,6 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
     await _changeloading();
     await context.read<AnasayfaCubit>().fetchtaksi();
     await _changeloading();
-
   }
 
   @override
@@ -56,12 +55,13 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var oran = MediaQuery.of(context);
     var genislik = oran.size.width;
+    var uzunluk = oran.size.height;
 
     return Scaffold(
       backgroundColor: white,
       appBar: AppBar(
         title: Text(
-          "~ Bey Taksi ~",
+          "~ Konya Taksi ~",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: genislik / 15,
@@ -105,9 +105,8 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
         physics: NeverScrollableScrollPhysics(),
         controller: _motionTabBarController,
         children: <Widget>[
-          BlocBuilder<AnasayfaCubit, List<Taksi>>(
-            builder: (context, taksilist) {
-              print("taksi: $taksilist");
+          BlocBuilder<AnasayfaCubit, Taksi>(
+            builder: (context, taksiData) {
               if (_isLoading) {
                 return Center(
                   child: Column(
@@ -117,10 +116,11 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                         color: Colors.yellow,
                         size: 50.0,
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: uzunluk / 30),
                       Text(
                         'Veriler Yükleniyor...',
                         style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color: Colors.black,
                         ),
@@ -128,15 +128,20 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                     ],
                   ),
                 );
-              } else if(taksilist.isNotEmpty){
+              } else if (taksiData.data != null && taksiData.data!.isNotEmpty) {
+                var allContents = taksiData.data!
+                    .expand((data) => data.subCategories ?? [])
+                    .expand((subCategory) => subCategory.contents ?? [])
+                    .toList();
                 return ListView.builder(
-                  itemCount: taksilist.length,
-                  itemBuilder: (context, indeks) {
-                    var taksi = taksilist[indeks];
+                  itemCount: allContents.length,
+                  itemBuilder: (context, index) {
+                    var data = allContents[index];
                     return Card(
                       elevation: 10.0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
@@ -146,11 +151,13 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                             children: [
                               Row(
                                 children: [
-                                  Text( "${taksi.title?? 'boş title'}",
+                                  Text(
+                                    "${data.title ?? 'boş title'}",
                                     style: TextStyle(
-                                        color: Colors.blueAccent,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.blueAccent,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -161,7 +168,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                     );
                   },
                 );
-              }else {
+              } else {
                 return Center(
                   child: Text(
                     "Veriler yüklenemedi.",
@@ -171,9 +178,6 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
               }
             },
           ),
-
-
-
           const Searchpage(),
           const Settingspage(),
         ],
