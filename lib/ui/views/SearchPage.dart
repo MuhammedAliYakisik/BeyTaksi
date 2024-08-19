@@ -22,11 +22,11 @@ class _SearchpageState extends State<Searchpage> {
 
   Future<void> konumagit() async {
     GoogleMapController controller = await haritakontrol.future;
-    var gidilecekkonum = CameraPosition(target: LatLng(41.0371,28.9774),zoom: 13);
+    var gidilecekkonum = CameraPosition(target: LatLng(37.8667,32.5),zoom: 13);
 
     var isaretduurm = Marker(
       markerId: MarkerId("ID"),
-      position: LatLng(41.0371,28.9774),
+      position: LatLng(37.8667,32.5),
       infoWindow: InfoWindow(title: "Konum",snippet: "Şuanki Konumunuz"));
     setState(() {
       isaret.add(isaretduurm);
