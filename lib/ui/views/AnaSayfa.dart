@@ -145,12 +145,13 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          height: 80,
+                          height: uzunluk/10,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Row(
+                              Column(
                                 children: [
+                                  Icon(Icons.location_on_sharp),
                                   Text(
                                     "${data.title ?? 'boş title'}",
                                     style: TextStyle(
@@ -159,6 +160,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  Text("ASD")
                                 ],
                               ),
                             ],
