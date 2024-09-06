@@ -109,7 +109,7 @@ class _SplashscreenState extends State<Splashscreen> with TickerProviderStateMix
                         height: 250,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white,
+                          color: yellow,
                         ),
                       ),
                     );

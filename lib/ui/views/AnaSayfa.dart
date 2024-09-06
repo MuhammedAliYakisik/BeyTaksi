@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:izmir_taksi/data/model/Taksi.dart';
 import 'package:izmir_taksi/ui/cubit/AnaSayfa_cubit.dart';
 import 'package:izmir_taksi/ui/views/SearchPage.dart';
@@ -62,11 +65,16 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text(
           "~ Konya Taksi ~",
-          style: TextStyle(
+          style: GoogleFonts.baskervville(
             fontWeight: FontWeight.bold,
             fontSize: genislik / 15,
           ),
         ),
+        actions: [
+          IconButton(onPressed: (){
+
+          }, icon: FaIcon(FontAwesomeIcons.magnifyingGlassLocation))
+        ],
         elevation: 0,
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -78,9 +86,9 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
       ),
       bottomNavigationBar: MotionTabBar(
         controller: _motionTabBarController,
-        initialSelectedTab: "Home",
-        labels: const ["Home", "Search", "Settings"],
-        icons: const [Icons.home, Icons.search, Icons.settings],
+        initialSelectedTab: "Ana Sayfa",
+        labels: const ["Ana Sayfa", "Harita", "Ayarlar"],
+        icons: const [Icons.home, Icons.map_outlined, Icons.settings],
         badges: null,
         tabSize: 50,
         tabBarHeight: 55,
@@ -145,24 +153,58 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          height: uzunluk/10,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          height: uzunluk/6,
+                          child: Column(
                             children: [
                               Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.location_on_sharp),
+
                                   Text(
                                     "${data.title ?? 'boş title'}",
-                                    style: TextStyle(
-                                      color: Colors.blueAccent,
-                                      fontSize: 20.0,
+                                    style: GoogleFonts.rubik(
+                                      color: bluee,
+                                      fontSize: genislik/20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Text("ASD")
+
+
                                 ],
                               ),
+                              Divider(),
+
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: FaIcon(FontAwesomeIcons.locationDot)
+                                  ),
+                                  Gap(genislik / 100),
+                                  Expanded(
+                                    child: Text(
+                                      "${data.address ?? 'boş title'}",
+                                      style: TextStyle(
+                                        color: bluee,
+                                        fontSize: genislik/25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      softWrap: true,
+
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Searchpage()));
+                                      },
+                                      icon: FaIcon(FontAwesomeIcons.mapLocationDot)
+                                  ),
+                                ],
+                              )
+
+
+
+
                             ],
                           ),
                         ),
