@@ -15,4 +15,13 @@ class AnasayfaCubit extends Cubit<Taksi> {
       print("Hata: $e");
     }
   }
+
+  Future<void> fetchsearch(String aramas) async {
+    try {
+      final searchdata = await _repo.searchTitles(aramas);
+      emit(searchdata as Taksi);
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
 }

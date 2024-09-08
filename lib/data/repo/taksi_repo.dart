@@ -9,14 +9,34 @@ class TaksiRepo {
     try {
       final response = await Dio().get(_baseurl);
       final data = response.data;
-
+      print("${data.runtimeType}");
       if (data is String) {
         final jsonData = json.decode(data);
         return Taksi.fromJson(jsonData);
       } else if (data is Map<String, dynamic>) {
         return Taksi.fromJson(data);
       } else {
-        throw Exception("Beklenmeyen veri formatı");
+        throw Exception("Beklenmeyen veri formatı ${data.runtimeType}");
+      }
+    } catch (e) {
+      print("Hata: $e");
+      throw e;
+    }
+  }
+
+  Future<List<String>> searchTitles(String query) async {
+    try {
+      final response = await Dio().get(_baseurl);
+      final data = response.data;
+      print("${data.runtimeType}");
+      if (data is Map<String, dynamic>) {
+        final List<dynamic> contents = data['data'][0]['sub_categories'][0]['contents'];
+        final List<String> titles = contents
+            .map((content) => content['title'] as String)
+            .toList();
+        return titles.where((title) => title.toLowerCase().contains(query.toLowerCase())).toList();
+      } else {
+        throw Exception("Beklenmeyen veri formatı ${data.runtimeType}");
       }
     } catch (e) {
       print("Hata: $e");

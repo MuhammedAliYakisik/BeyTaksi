@@ -24,10 +24,18 @@ class Anasayfa extends StatefulWidget {
 class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
   MotionTabBarController? _motionTabBarController;
   bool _isLoading = false;
+  bool searchstate = false;
+  String searchword = "";
 
   Future<void> _changeloading() async {
     setState(() {
       _isLoading = !_isLoading;
+    });
+  }
+
+  Future<void> search() async {
+    setState(() {
+      searchstate = !searchstate;
     });
   }
 
@@ -62,7 +70,43 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: white,
-      appBar: AppBar(
+      appBar: searchstate
+          ? AppBar(
+        title: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  hintText: "Arama için birşey giriniz",
+                  icon: Icon(FontAwesomeIcons.taxi),
+                ),
+                onChanged: (aramasonuc) {
+                  setState(() {
+                    searchword = aramasonuc;
+                  });
+                  context.read<AnasayfaCubit>().fetchsearch(aramasonuc);
+                },
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.cancel, color: Colors.black),
+              onPressed: () {
+                setState(() {
+                  searchstate = false;
+                  searchword = "";
+                });
+                context.read<AnasayfaCubit>().fetchtaksi();
+              },
+            ),
+          ],
+        ),
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+      )
+          : AppBar(
         title: Text(
           "~ Konya Taksi ~",
           style: GoogleFonts.baskervville(
@@ -71,9 +115,14 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
           ),
         ),
         actions: [
-          IconButton(onPressed: (){
-
-          }, icon: FaIcon(FontAwesomeIcons.magnifyingGlassLocation))
+          IconButton(
+            icon: Icon(FontAwesomeIcons.magnifyingGlassLocation, color: Colors.black),
+            onPressed: () {
+              setState(() {
+                search();
+              });
+            },
+          ),
         ],
         elevation: 0,
         centerTitle: true,
@@ -153,58 +202,52 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          height: uzunluk/6,
+                          height: uzunluk / 6,
                           child: Column(
                             children: [
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-
                                   Text(
                                     "${data.title ?? 'boş title'}",
                                     style: GoogleFonts.rubik(
                                       color: bluee,
-                                      fontSize: genislik/20,
+                                      fontSize: genislik / 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-
-
                                 ],
                               ),
                               Divider(),
-
                               Row(
                                 children: [
                                   IconButton(
                                       onPressed: () {},
-                                      icon: FaIcon(FontAwesomeIcons.locationDot)
-                                  ),
+                                      icon: FaIcon(FontAwesomeIcons.locationDot)),
                                   Gap(genislik / 100),
                                   Expanded(
                                     child: Text(
                                       "${data.address ?? 'boş title'}",
                                       style: TextStyle(
                                         color: bluee,
-                                        fontSize: genislik/25,
+                                        fontSize: genislik / 25,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       softWrap: true,
-
                                     ),
                                   ),
                                   IconButton(
                                       onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Searchpage()));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Searchpage()));
                                       },
-                                      icon: FaIcon(FontAwesomeIcons.mapLocationDot)
-                                  ),
+                                      icon: FaIcon(
+                                          FontAwesomeIcons.mapLocationDot)),
                                 ],
                               )
-
-
-
-
                             ],
                           ),
                         ),
