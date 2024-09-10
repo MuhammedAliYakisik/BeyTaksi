@@ -3,11 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:izmir_taksi/ui/cubit/AnaSayfa_cubit.dart';
 import 'package:izmir_taksi/ui/views/AnaSayfa.dart';
 import 'package:izmir_taksi/ui/views/SplashScreen.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'data/repo/taksi_repo.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+        supportedLocales: [Locale('en', 'US'), Locale('tr', 'TR')],
+        path: 'assets/langs', // <-- change the path of the translation files
+        fallbackLocale: Locale('en', 'US'),
+        child: MyApp()
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

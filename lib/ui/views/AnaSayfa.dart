@@ -13,6 +13,7 @@ import 'package:izmir_taksi/ui/views/SettingsPage.dart';
 import 'package:izmir_taksi/utils/color.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Anasayfa extends StatefulWidget {
   const Anasayfa({super.key});

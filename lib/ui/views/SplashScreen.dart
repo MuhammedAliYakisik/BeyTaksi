@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:izmir_taksi/generated/locale_keys.g.dart';
 import 'package:izmir_taksi/ui/views/AnaSayfa.dart';
 import 'package:izmir_taksi/utils/color.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -95,7 +97,7 @@ class _SplashscreenState extends State<Splashscreen> with TickerProviderStateMix
                 ),
               ),
             ),
-            const SizedBox(height: 40), // Boşluk burada eklendi
+            const SizedBox(height: 40),
             Stack(
               alignment: Alignment.center,
               children: [
