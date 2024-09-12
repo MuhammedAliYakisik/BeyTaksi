@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izmir_taksi/generated/locale_keys.g.dart';
 import 'package:izmir_taksi/utils/color.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class Settingspage extends StatefulWidget {
   const Settingspage({super.key});
@@ -24,16 +22,9 @@ class _SettingspageState extends State<Settingspage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
 
-            Text(LocaleKeys.anasayfa_body.tr()),
-            Text(LocaleKeys.anasayfa_title.tr()),
 
-            ElevatedButton(onPressed: (){
-              context.setLocale(Locale("tr","TR"));
-            }, child: Text("Türkçe Yap")),
-
-            ElevatedButton(onPressed: (){
-              context.setLocale(Locale("en","US"));
-            }, child: Text("İngilizce yap")),
+         //dark
+            //exit
 
           ],
         ),
