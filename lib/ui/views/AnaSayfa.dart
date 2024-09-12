@@ -14,6 +14,7 @@ import 'package:izmir_taksi/utils/color.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
 
+
 class Anasayfa extends StatefulWidget {
   const Anasayfa({super.key});
 
@@ -242,7 +243,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    Searchpage()));
+                                                    Searchpage(data.location.lat,data.location.lon,data.title)));
                                       },
                                       icon: FaIcon(
                                           FontAwesomeIcons.mapLocationDot)),
@@ -265,7 +266,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
               }
             },
           ),
-          const Searchpage(),
+           Searchpage(37.8667,32.5,""),
           const Settingspage(),
         ],
       ),
