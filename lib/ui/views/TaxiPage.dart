@@ -67,7 +67,6 @@ class _TaxipageState extends State<Taxipage> {
       markerId: MarkerId("ID2"),
       position: LatLng(37.8667, 32.5),
       infoWindow: InfoWindow(title: "Konumunuz", snippet: ""),
-      icon: yeniKonumicon,
     );
 
 

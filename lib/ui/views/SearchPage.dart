@@ -39,7 +39,7 @@ class _SearchpageState extends State<Searchpage> {
     super.initState();
     konum = CameraPosition(
       target: LatLng(37.8667, 32.5), // Başlangıç pozisyonu
-      zoom: 12,
+      zoom: 10,
     );
     konumagit();
   }
@@ -52,14 +52,40 @@ class _SearchpageState extends State<Searchpage> {
       markerId: MarkerId("ID"),
       position: LatLng(widget.lat, widget.lng),
       infoWindow: InfoWindow(title: "${widget.taksiad}", snippet: "Hoşgeldiniz"),
-      icon: konumicon,
     );
 
     // Yeni marker (37.853112, 32.422485)
-    var yeniiIsaret = Marker(
+    var adliye = Marker(
       markerId: MarkerId("ID2"),
+      position: LatLng(37.860722, 32.541628),
+      infoWindow: InfoWindow(title: "Adliye Taksi", snippet: "Hoşgeldiniz"),
+      icon: konumicon,
+      onTap: () {
+        _cizgiCiz(LatLng(widget.lat, widget.lng), LatLng(37.860722, 32.541628));
+      }, // Tıklanınca çizgi çizen fonksiyon
+    );
+    var istasyon = Marker(
+      markerId: MarkerId("ID3"),
+      position: LatLng(37.865552, 32.476585),
+      infoWindow: InfoWindow(title: "İstasyon Taksi", snippet: "Hoşgeldiniz"),
+      icon: konumicon,
+      onTap: () {
+        _cizgiCiz(LatLng(widget.lat, widget.lng), LatLng(37.865552, 32.476585));
+      }, // Tıklanınca çizgi çizen fonksiyon
+    );
+    var Yeniyol = Marker(
+      markerId: MarkerId("ID4"),
+      position: LatLng(37.869388, 32.473275),
+      infoWindow: InfoWindow(title: "Yeniyol Taksi", snippet: "Hoşgeldiniz"),
+      icon: konumicon,
+      onTap: () {
+        _cizgiCiz(LatLng(widget.lat, widget.lng), LatLng(37.869388, 32.473275));
+      }, // Tıklanınca çizgi çizen fonksiyon
+    );
+    var yesilmeram = Marker(
+      markerId: MarkerId("ID5"),
       position: LatLng(37.853112, 32.422485),
-      infoWindow: InfoWindow(title: "Yeni Taksi", snippet: "Hoşgeldiniz"),
+      infoWindow: InfoWindow(title: "YesilMeram Taksi", snippet: "Hoşgeldiniz"),
       icon: konumicon,
       onTap: () {
         _cizgiCiz(LatLng(widget.lat, widget.lng), LatLng(37.853112, 32.422485));
@@ -68,7 +94,10 @@ class _SearchpageState extends State<Searchpage> {
 
     setState(() {
       isaret.add(isaretduurm);
-      isaret.add(yeniiIsaret); // Yeni marker'ı listeye ekledik
+      isaret.add(adliye); // Yeni marker'ı listeye ekledik
+      isaret.add(istasyon);
+      isaret.add(Yeniyol);
+      isaret.add(yesilmeram);
     });
 
     controller.animateCamera(CameraUpdate.newCameraPosition(konum));
