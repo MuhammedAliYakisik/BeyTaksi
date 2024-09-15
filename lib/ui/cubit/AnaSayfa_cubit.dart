@@ -2,26 +2,48 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:izmir_taksi/data/model/Taksi.dart';
 import 'package:izmir_taksi/data/repo/taksi_repo.dart';
 
-class AnasayfaCubit extends Cubit<Taksi> {
+// Farklı durumlar için state sınıfları
+abstract class AnasayfaState {}
+
+class TaksiLoading extends AnasayfaState {}
+
+class TaksiLoaded extends AnasayfaState {
+  final Taksi taksi;
+  TaksiLoaded(this.taksi);
+}
+
+class SearchResultsLoaded extends AnasayfaState {
+  final List<String> searchResults;
+  SearchResultsLoaded(this.searchResults);
+}
+
+class TaksiError extends AnasayfaState {
+  final String message;
+  TaksiError(this.message);
+}
+
+class AnasayfaCubit extends Cubit<AnasayfaState> {
   final TaksiRepo _repo;
 
-  AnasayfaCubit(this._repo) : super(Taksi());
+  AnasayfaCubit(this._repo) : super(TaksiLoading());
 
   Future<void> fetchtaksi() async {
+    emit(TaksiLoading());
     try {
       final taksiData = await _repo.fetchTaksi();
-      emit(taksiData);
+      emit(TaksiLoaded(taksiData));
     } catch (e) {
-      print("Hata: $e");
+      emit(TaksiError("Veri alınırken bir hata oluştu: $e"));
     }
   }
 
-  Future<void> fetchsearch(String aramas) async {
+  Future<void> fetchsearch(String aramaKelimesi) async {
+    emit(TaksiLoading());
     try {
-      final searchdata = await _repo.searchTitles(aramas);
-      emit(searchdata as Taksi);
+      final searchdata = await _repo.searchTitles(aramaKelimesi);
+      emit(SearchResultsLoaded(searchdata));
     } catch (e) {
-      print("Hata: $e");
+      emit(TaksiError("Arama sırasında bir hata oluştu: $e"));
     }
   }
 }

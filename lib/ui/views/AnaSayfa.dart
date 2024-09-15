@@ -164,9 +164,9 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
         physics: NeverScrollableScrollPhysics(),
         controller: _motionTabBarController,
         children: <Widget>[
-          BlocBuilder<AnasayfaCubit, Taksi>(
-            builder: (context, taksiData) {
-              if (_isLoading) {
+          BlocBuilder<AnasayfaCubit, AnasayfaState>(
+            builder: (context, state) {
+              if (state is TaksiLoading) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -187,8 +187,8 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                     ],
                   ),
                 );
-              } else if (taksiData.data != null && taksiData.data!.isNotEmpty) {
-                var allContents = taksiData.data!
+              } else if (state is TaksiLoaded) {
+                var allContents = state.taksi.data!
                     .expand((data) => data.subCategories ?? [])
                     .expand((subCategory) => subCategory.contents ?? [])
                     .toList();
@@ -246,8 +246,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                                                 builder: (context) =>
                                                     Taxipage(data.location.lat,data.location.lon,data.title)));
                                       },
-                                      icon: FaIcon(
-                                          FontAwesomeIcons.mapLocationDot)),
+                                      icon: FaIcon(FontAwesomeIcons.mapLocationDot)),
                                 ],
                               )
                             ],
@@ -257,17 +256,26 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                     );
                   },
                 );
-              } else {
-                return Center(
-                  child: Text(
-                    "Veriler yüklenemedi.",
-                    style: TextStyle(fontSize: 16, color: Colors.black),
-                  ),
+              } else if (state is SearchResultsLoaded) {
+                return ListView.builder(
+                  itemCount: state.searchResults.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(state.searchResults[index]),
+                    );
+                  },
                 );
+              } else if (state is TaksiError) {
+                return Center(
+                  child: Text("Hata: ${state.message}"),
+                );
+              } else {
+                return Center(child: Text("Veriler yüklenemedi."));
               }
             },
           ),
-           Searchpage(37.8667,32.5,""),
+
+          Searchpage(37.8667,32.5,""),
           const Settingspage(),
         ],
       ),

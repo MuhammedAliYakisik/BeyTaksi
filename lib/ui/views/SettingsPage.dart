@@ -25,6 +25,8 @@ class _SettingspageState extends State<Settingspage> {
 
          //dark
             //exit
+            //destekyardım
+            //değerlendirme
 
           ],
         ),

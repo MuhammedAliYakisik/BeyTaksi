@@ -36,19 +36,19 @@ class _TaxipageState extends State<Taxipage> {
       target: LatLng(37.8667, 32.5),
       zoom: 12,
     );
-    iconolustur(context); // İkonları burada oluşturuyoruz
+    iconolustur(context);
     konumagit();
   }
   iconolustur(context) async {
     ImageConfiguration configuration = createLocalImageConfiguration(context);
 
-    // Mevcut ikon
+
     konumicon = await BitmapDescriptor.fromAssetImage(configuration, "assets/taxi.png");
 
-    // Yeni ikon
+
     yeniKonumicon = await BitmapDescriptor.fromAssetImage(configuration, "assets/taxi.png");
 
-    setState(() {}); // İkonlar oluşturulduktan sonra state'i güncelliyoruz
+    setState(() {});
   }
 
   Future<void> konumagit() async {
