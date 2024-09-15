@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:izmir_taksi/data/model/Taksi.dart';
 import 'package:izmir_taksi/ui/cubit/AnaSayfa_cubit.dart';
+import 'package:izmir_taksi/ui/views/TaxiPage.dart';
 import 'package:izmir_taksi/ui/views/SearchPage.dart';
 import 'package:izmir_taksi/ui/views/SettingsPage.dart';
 import 'package:izmir_taksi/utils/color.dart';
@@ -243,7 +244,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    Searchpage(data.location.lat,data.location.lon,data.title)));
+                                                    Taxipage(data.location.lat,data.location.lon,data.title)));
                                       },
                                       icon: FaIcon(
                                           FontAwesomeIcons.mapLocationDot)),

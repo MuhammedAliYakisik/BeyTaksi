@@ -7,47 +7,54 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:izmir_taksi/ui/views/AnaSayfa.dart';
 import 'package:izmir_taksi/utils/color.dart';
 
-class Searchpage extends StatefulWidget {
+class Taxipage extends StatefulWidget {
   double lat;
   double lng;
   String taksiad;
 
-  Searchpage(this.lat, this.lng, this.taksiad);
+  Taxipage(this.lat, this.lng, this.taksiad);
 
   @override
-  State<Searchpage> createState() => _SearchpageState();
+  State<Taxipage> createState() => _TaxipageState();
 }
 
-class _SearchpageState extends State<Searchpage> {
+class _TaxipageState extends State<Taxipage> {
   Completer<GoogleMapController> haritakontrol = Completer();
   late CameraPosition konum;
   List<Marker> isaret = <Marker>[];
-  List<Polyline> cizgiler = <Polyline>[]; // Çizgi listesi
+  List<Polyline> cizgiler = <Polyline>[];
   late BitmapDescriptor konumicon;
+  late BitmapDescriptor yeniKonumicon;
 
-  iconolustur(context) {
-    ImageConfiguration configuration = createLocalImageConfiguration(context);
-    BitmapDescriptor.fromAssetImage(configuration, "assets/taxi.png").then((value) {
-      setState(() {
-        konumicon = value;
-      });
-    });
-  }
+
+
 
   @override
   void initState() {
     super.initState();
     konum = CameraPosition(
-      target: LatLng(37.8667, 32.5), // Başlangıç pozisyonu
+      target: LatLng(37.8667, 32.5),
       zoom: 12,
     );
+    iconolustur(context); // İkonları burada oluşturuyoruz
     konumagit();
+  }
+  iconolustur(context) async {
+    ImageConfiguration configuration = createLocalImageConfiguration(context);
+
+    // Mevcut ikon
+    konumicon = await BitmapDescriptor.fromAssetImage(configuration, "assets/taxi.png");
+
+    // Yeni ikon
+    yeniKonumicon = await BitmapDescriptor.fromAssetImage(configuration, "assets/taxi.png");
+
+    setState(() {}); // İkonlar oluşturulduktan sonra state'i güncelliyoruz
   }
 
   Future<void> konumagit() async {
     GoogleMapController controller = await haritakontrol.future;
 
-    // İlk marker (widget.lat, widget.lng)
+
     var isaretduurm = Marker(
       markerId: MarkerId("ID"),
       position: LatLng(widget.lat, widget.lng),
@@ -55,40 +62,34 @@ class _SearchpageState extends State<Searchpage> {
       icon: konumicon,
     );
 
-    // Yeni marker (37.853112, 32.422485)
-    var yeniiIsaret = Marker(
+
+    var yeniIsaret = Marker(
       markerId: MarkerId("ID2"),
-      position: LatLng(37.853112, 32.422485),
-      infoWindow: InfoWindow(title: "Yeni Taksi", snippet: "Hoşgeldiniz"),
-      icon: konumicon,
-      onTap: () {
-        _cizgiCiz(LatLng(widget.lat, widget.lng), LatLng(37.853112, 32.422485));
-      }, // Tıklanınca çizgi çizen fonksiyon
+      position: LatLng(37.8667, 32.5),
+      infoWindow: InfoWindow(title: "Konumunuz", snippet: ""),
+      icon: yeniKonumicon,
     );
 
-    setState(() {
-      isaret.add(isaretduurm);
-      isaret.add(yeniiIsaret); // Yeni marker'ı listeye ekledik
-    });
 
-    controller.animateCamera(CameraUpdate.newCameraPosition(konum));
-  }
-
-  // Çizgi çizme fonksiyonu
-  void _cizgiCiz(LatLng baslangic, LatLng bitis) {
     var cizgi = Polyline(
       polylineId: PolylineId("cizgi1"),
-      color: Colors.red, // Çizgi rengi
-      width: 5, // Çizgi kalınlığı
+      color: Colors.red,
+      width: 5,
       points: [
-        baslangic, // Başlangıç konumu (seçili marker)
-        bitis, // Bitiş konumu (tıklanılan marker)
+        LatLng(widget.lat, widget.lng),
+        LatLng(37.8667, 32.5),
       ],
     );
 
     setState(() {
-      cizgiler.add(cizgi); // Çizgiyi ekliyoruz
+      isaret.add(isaretduurm);
+      isaret.add(yeniIsaret);
+      cizgiler.add(cizgi);
     });
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(konum));
+    print("${widget.lat}");
+    print("${widget.lng}");
   }
 
   @override
@@ -105,12 +106,12 @@ class _SearchpageState extends State<Searchpage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: uzunluk / 1.3,
+              height: uzunluk / 1.1,
               width: genislik / 1,
               child: GoogleMap(
                 mapType: MapType.normal,
                 markers: Set<Marker>.of(isaret),
-                polylines: Set<Polyline>.of(cizgiler), // Çizgileri haritaya ekliyoruz
+                polylines: Set<Polyline>.of(cizgiler),
                 initialCameraPosition: konum,
                 onMapCreated: (GoogleMapController controller) {
                   haritakontrol.complete(controller);
