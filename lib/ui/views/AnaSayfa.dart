@@ -113,6 +113,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
           "~ Konya Taksi ~",
           style: GoogleFonts.baskervville(
             fontWeight: FontWeight.bold,
+            color: Colors.black,
             fontSize: genislik / 15,
           ),
         ),

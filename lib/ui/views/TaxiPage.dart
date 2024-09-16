@@ -25,9 +25,7 @@ class _TaxipageState extends State<Taxipage> {
   List<Polyline> cizgiler = <Polyline>[];
   late BitmapDescriptor konumicon;
   late BitmapDescriptor yeniKonumicon;
-
-
-
+  StreamSubscription<Position>? konumTakibi;
 
   @override
   void initState() {
@@ -38,22 +36,24 @@ class _TaxipageState extends State<Taxipage> {
     );
     iconolustur(context);
     konumagit();
+    _konumTakipBaslat();
   }
+
+  @override
+  void dispose() {
+    konumTakibi?.cancel();
+    super.dispose();
+  }
+
   iconolustur(context) async {
     ImageConfiguration configuration = createLocalImageConfiguration(context);
-
-
     konumicon = await BitmapDescriptor.fromAssetImage(configuration, "assets/taxi.png");
-
-
     yeniKonumicon = await BitmapDescriptor.fromAssetImage(configuration, "assets/taxi.png");
-
     setState(() {});
   }
 
   Future<void> konumagit() async {
     GoogleMapController controller = await haritakontrol.future;
-
 
     var isaretduurm = Marker(
       markerId: MarkerId("ID"),
@@ -62,13 +62,11 @@ class _TaxipageState extends State<Taxipage> {
       icon: konumicon,
     );
 
-
     var yeniIsaret = Marker(
       markerId: MarkerId("ID2"),
       position: LatLng(37.8667, 32.5),
       infoWindow: InfoWindow(title: "Konumunuz", snippet: ""),
     );
-
 
     var cizgi = Polyline(
       polylineId: PolylineId("cizgi1"),
@@ -87,8 +85,34 @@ class _TaxipageState extends State<Taxipage> {
     });
 
     controller.animateCamera(CameraUpdate.newCameraPosition(konum));
+    print("${widget.taksiad}");
     print("${widget.lat}");
     print("${widget.lng}");
+  }
+
+
+  void _konumTakipBaslat() {
+    konumTakibi = Geolocator.getPositionStream().listen((Position position) async {
+      GoogleMapController controller = await haritakontrol.future;
+
+      LatLng yeniKonum = LatLng(position.latitude, position.longitude);
+
+      setState(() {
+
+        isaret.removeWhere((m) => m.markerId == MarkerId("user_location"));
+        isaret.add(
+          Marker(
+            markerId: MarkerId("user_location"),
+            position: yeniKonum,
+            infoWindow: InfoWindow(title: "Mevcut Konumunuz"),
+            icon: yeniKonumicon,
+          ),
+        );
+      });
+
+
+      controller.animateCamera(CameraUpdate.newLatLng(yeniKonum));
+    });
   }
 
   @override
@@ -112,6 +136,7 @@ class _TaxipageState extends State<Taxipage> {
                 markers: Set<Marker>.of(isaret),
                 polylines: Set<Polyline>.of(cizgiler),
                 initialCameraPosition: konum,
+                myLocationEnabled: true,
                 onMapCreated: (GoogleMapController controller) {
                   haritakontrol.complete(controller);
                 },
