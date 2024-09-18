@@ -33,7 +33,7 @@ class AnasayfaCubit extends Cubit<AnasayfaState> {
       final taksiData = await _repo.fetchTaksi();
       emit(TaksiLoaded(taksiData));
     } catch (e) {
-      emit(TaksiError("Veri alınırken bir hata oluştu: $e"));
+      emit(TaksiError("Veri alınırken internetten kaynaklı bir  hata oluştu: İnternete tekrar bağlanınız "));
     }
   }
 

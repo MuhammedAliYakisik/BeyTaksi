@@ -80,8 +80,10 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
               child: TextField(
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
-                  hintText: "Arama için birşey giriniz",
-                  icon: Icon(FontAwesomeIcons.taxi),
+                  hintText: "Arama için birşey giriniz",hintStyle: TextStyle(
+                  color: Colors.black
+                ),
+                  icon: Icon(FontAwesomeIcons.taxi,color: Colors.black,),
                 ),
                 onChanged: (aramasonuc) {
                   setState(() {
@@ -204,65 +206,119 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: uzunluk / 6,
-                          child: Column(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "${data.title ?? 'boş title'}",
-                                    style: GoogleFonts.rubik(
-                                      color: bluee,
-                                      fontSize: genislik / 20,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${data.title ?? 'boş title'}",
+                                  style: GoogleFonts.rubik(
+                                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                                    fontSize: genislik / 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Divider(),
+                            Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: FaIcon(FontAwesomeIcons.locationDot)),
+                                Gap(genislik / 100),
+                                Expanded(
+                                  child: Text(
+                                    "${data.address ?? 'boş title'}",
+                                    style: TextStyle(
+                                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                                      fontSize: genislik / 25,
                                       fontWeight: FontWeight.bold,
                                     ),
+                                    softWrap: true,
                                   ),
-                                ],
-                              ),
-                              Divider(),
-                              Row(
-                                children: [
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: FaIcon(FontAwesomeIcons.locationDot)),
-                                  Gap(genislik / 100),
-                                  Expanded(
-                                    child: Text(
-                                      "${data.address ?? 'boş title'}",
-                                      style: TextStyle(
-                                        color: bluee,
-                                        fontSize: genislik / 25,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Taxipage(data.location.lat,data.location.lon,data.title)));
-                                      },
-                                      icon: FaIcon(FontAwesomeIcons.mapLocationDot)),
-                                ],
-                              )
-                            ],
-                          ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Taxipage(data.location.lat,data.location.lon,data.title)));
+                                    },
+                                    icon: FaIcon(FontAwesomeIcons.mapLocationDot)),
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     );
                   },
                 );
               } else if (state is SearchResultsLoaded) {
+
                 return ListView.builder(
                   itemCount: state.searchResults.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(state.searchResults[index]),
+                    var data = state.searchResults[index];
+                    return SingleChildScrollView(
+                      child: Card(
+                        elevation: 10.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: uzunluk / 6,
+                            child: Column(
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "${data ?? 'boş title'}",
+                                      style: GoogleFonts.rubik(
+                                        color: bluee,
+                                        fontSize: genislik / 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Divider(),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: FaIcon(FontAwesomeIcons.locationDot)),
+                                    Gap(genislik / 100),
+                                    Expanded(
+                                      child: Text(
+                                        "${data ?? 'boş title'}",
+                                        style: TextStyle(
+                                          color: bluee,
+                                          fontSize: genislik / 25,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Searchpage(37.8667,32.5,""),));
+                                      
+                                        },
+                                        icon: FaIcon(FontAwesomeIcons.mapLocationDot)),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     );
                   },
                 );
