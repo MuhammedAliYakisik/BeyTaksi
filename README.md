@@ -1,16 +1,44 @@
-# konya_taksi
 
-A new Flutter project.
 
-## Getting Started
+<h2 align="center">
 
-This project is a starting point for a Flutter application.
+🚀 KONYA TAKSİ 🚀
 
-A few resources to get you started if this is your first Flutter project:
+</h2>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<h3 align="left">
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ㄨ DEPENDENCİES ㄨ
+--------------------------------------------------------------------
+  ↳ google_fonts: ^6.2.1
+  ↳ font_awesome_flutter: ^10.7.0
+  ↳ flutter_spinkit: ^5.2.1
+  ↳ motion_tab_bar: ^2.0.4
+  ↳ dio: ^5.5.0+1
+  ↳ flutter_bloc:
+  ↳ geolocator: ^8.0.3
+  ↳ provider: ^6.1.2
+  ↳ google_maps_flutter: ^2.1.1
+  ↳ gap: ^3.0.1
+  ↳ lottie: ^3.1.2
+
+  <h3 align="left">
+    
+  🎥 VİDEO OF THE APP 🎥
+  --------------------------------------------------------------------
+  
+  
+
+https://github.com/user-attachments/assets/9d7afd38-8fb7-4d23-ae89-e1c745306302
+
+
+
+</h3>
+
+
+
+
+
+
+
+
