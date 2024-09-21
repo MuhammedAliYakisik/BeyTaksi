@@ -1,16 +1,12 @@
 class Taksi {
-  List<Data>? data;
+  final List<Data>? data;
 
-  Taksi({this.data});
+  const Taksi({this.data});
 
-  Taksi.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      data = [];
-      json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
-      });
-    }
-  }
+  Taksi.fromJson(Map<String, dynamic> json)
+      : data = (json['data'] != null)
+      ? List<Data>.from(json['data'].map((v) => Data.fromJson(v)))
+      : null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
@@ -22,22 +18,19 @@ class Taksi {
 }
 
 class Data {
-  String? title;
-  int? totalCount;
-  List<SubCategories>? subCategories;
+  final String? title;
+  final int? totalCount;
+  final List<SubCategories>? subCategories;
 
-  Data({this.title, this.totalCount, this.subCategories});
+  const Data({this.title, this.totalCount, this.subCategories});
 
-  Data.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    totalCount = json['total_count'];
-    if (json['sub_categories'] != null) {
-      subCategories = [];
-      json['sub_categories'].forEach((v) {
-        subCategories!.add(SubCategories.fromJson(v));
-      });
-    }
-  }
+  Data.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        totalCount = json['total_count'],
+        subCategories = (json['sub_categories'] != null)
+            ? List<SubCategories>.from(json['sub_categories']
+            .map((v) => SubCategories.fromJson(v)))
+            : null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
@@ -52,22 +45,19 @@ class Data {
 }
 
 class SubCategories {
-  String? title;
-  int? totalCount;
-  List<Contents>? contents;
+  final String? title;
+  final int? totalCount;
+  final List<Contents>? contents;
 
-  SubCategories({this.title, this.totalCount, this.contents});
+  const SubCategories({this.title, this.totalCount, this.contents});
 
-  SubCategories.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    totalCount = json['total_count'];
-    if (json['contents'] != null) {
-      contents = [];
-      json['contents'].forEach((v) {
-        contents!.add(Contents.fromJson(v));
-      });
-    }
-  }
+  SubCategories.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        totalCount = json['total_count'],
+        contents = (json['contents'] != null)
+            ? List<Contents>.from(
+            json['contents'].map((v) => Contents.fromJson(v)))
+            : null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
@@ -81,19 +71,18 @@ class SubCategories {
 }
 
 class Contents {
-  String? title;
-  String? address;
-  Location? location;
+  final String? title;
+  final String? address;
+  final Location? location;
 
-  Contents({this.title, this.address, this.location});
+  const Contents({this.title, this.address, this.location});
 
-  Contents.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    address = json['address'];
-    location = json['location'] != null
-        ? Location.fromJson(json['location'])
-        : null;
-  }
+  Contents.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        address = json['address'],
+        location = json['location'] != null
+            ? Location.fromJson(json['location'])
+            : null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
@@ -107,15 +96,14 @@ class Contents {
 }
 
 class Location {
-  double? lat;
-  double? lon;
+  final double? lat;
+  final double? lon;
 
-  Location({this.lat, this.lon});
+  const Location({this.lat, this.lon});
 
-  Location.fromJson(Map<String, dynamic> json) {
-    lat = json['lat'];
-    lon = json['lon'];
-  }
+  Location.fromJson(Map<String, dynamic> json)
+      : lat = json['lat'],
+        lon = json['lon'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};

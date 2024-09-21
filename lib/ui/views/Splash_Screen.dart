@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izmir_taksi/ui/views/AnaSayfa.dart';
+import 'package:izmir_taksi/ui/views/Ana_Sayfa.dart';
 import 'package:izmir_taksi/utils/Color.dart';
 
 class Splashscreen extends StatefulWidget {

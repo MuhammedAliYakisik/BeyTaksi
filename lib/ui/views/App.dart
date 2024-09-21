@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:izmir_taksi/data/repo/TaksiRepo.dart';
-import 'package:izmir_taksi/ui/cubit/AnasayfaCubit.dart';
+import 'package:izmir_taksi/data/repo/Taksi_Repo.dart';
+import 'package:izmir_taksi/ui/cubit/Anasayfa_Cubit.dart';
 import 'package:provider/provider.dart';
-import 'package:izmir_taksi/ui/cubit/ThemeNotifee.dart';
-import 'package:izmir_taksi/ui/views/SplashScreen.dart';
+import 'package:izmir_taksi/ui/cubit/Theme_Notifier.dart';
+import 'package:izmir_taksi/ui/views/Splash_Screen.dart';
 
 
 class MyApp extends StatelessWidget {

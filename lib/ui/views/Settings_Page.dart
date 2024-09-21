@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
-import 'package:izmir_taksi/ui/cubit/ThemeNotifee.dart';
+import 'package:izmir_taksi/ui/cubit/Theme_Notifier.dart';
 import 'package:izmir_taksi/utils/Color.dart';
 
 class Settingspage extends StatefulWidget {
