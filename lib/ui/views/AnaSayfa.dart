@@ -7,11 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:izmir_taksi/data/model/Taksi.dart';
-import 'package:izmir_taksi/ui/cubit/AnaSayfa_cubit.dart';
+import 'package:izmir_taksi/ui/cubit/AnasayfaCubit.dart';
 import 'package:izmir_taksi/ui/views/TaxiPage.dart';
 import 'package:izmir_taksi/ui/views/SearchPage.dart';
 import 'package:izmir_taksi/ui/views/SettingsPage.dart';
-import 'package:izmir_taksi/utils/color.dart';
+import 'package:izmir_taksi/utils/Color.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
 

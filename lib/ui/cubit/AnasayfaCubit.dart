@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:izmir_taksi/data/model/Taksi.dart';
-import 'package:izmir_taksi/data/repo/taksi_repo.dart';
+import 'package:izmir_taksi/data/repo/TaksiRepo.dart';
 
 // Farklı durumlar için state sınıfları
 abstract class AnasayfaState {}

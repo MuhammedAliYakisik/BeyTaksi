@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:izmir_taksi/main.dart';
+import 'package:izmir_taksi/ui/views/App.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
