@@ -60,15 +60,3 @@ extension CustomColorsExtension on CustomColors {
     }
   }
 }
-
-// Kullanım örneği
-void main() {
-  // Renk değerini almak için
-  Color blueColor = CustomColors.blue.color;
-  print('Mavi rengin hex kodu: 0x${blueColor.value.toRadixString(16)}');
-
-  // Tüm renkleri listelemek için
-  for (var colorEnum in CustomColors.values) {
-    print('${colorEnum.name}: 0x${colorEnum.color.value.toRadixString(16)}');
-  }
-}
