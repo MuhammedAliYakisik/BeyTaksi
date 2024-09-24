@@ -7,6 +7,6 @@ class ThemeNotifier extends ChangeNotifier {
 
   void changetheme() {
     _isDarkMode = !_isDarkMode;
-    notifyListeners();  // Temayı değiştirdikten sonra dinleyicilere haber verir.
+    notifyListeners();
   }
 }

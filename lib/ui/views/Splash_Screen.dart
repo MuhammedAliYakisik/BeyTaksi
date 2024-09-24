@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izmir_taksi/ui/views/Ana_Sayfa.dart';
-import 'package:izmir_taksi/utils/Color.dart';
+import 'package:izmir_taksi/utils/Color_Page.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -84,7 +84,7 @@ class _SplashscreenState extends State<Splashscreen> with TickerProviderStateMix
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: yellow,
+                  color: CustomColors.yellow.color,
                   shadows: [
                     Shadow(
                       blurRadius: 20.0,
@@ -109,7 +109,7 @@ class _SplashscreenState extends State<Splashscreen> with TickerProviderStateMix
                         height: 250,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: yellow,
+                          color: CustomColors.yellow.color,
                         ),
                       ),
                     );

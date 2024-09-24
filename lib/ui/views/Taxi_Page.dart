@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:izmir_taksi/ui/views/Ana_Sayfa.dart';
-import 'package:izmir_taksi/utils/Color.dart';
+import 'package:izmir_taksi/utils/Color_Page.dart';
 
 class Taxipage extends StatefulWidget {
   double lat;
@@ -123,7 +123,7 @@ class _TaxipageState extends State<Taxipage> {
     var uzunluk = oran.size.height;
 
     return Scaffold(
-      backgroundColor: white,
+      backgroundColor: CustomColors.white.color,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

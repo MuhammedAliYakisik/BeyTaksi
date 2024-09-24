@@ -11,7 +11,7 @@ import 'package:izmir_taksi/ui/cubit/Anasayfa_Cubit.dart';
 import 'package:izmir_taksi/ui/views/Taxi_Page.dart';
 import 'package:izmir_taksi/ui/views/Search_Page.dart';
 import 'package:izmir_taksi/ui/views/Settings_Page.dart';
-import 'package:izmir_taksi/utils/Color.dart';
+import 'package:izmir_taksi/utils/Color_Page.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
 
@@ -71,7 +71,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
     var uzunluk = oran.size.height;
 
     return Scaffold(
-      backgroundColor: white,
+      backgroundColor: CustomColors.white.color,
       appBar: searchstate
           ? AppBar(
         title: Row(
@@ -151,10 +151,10 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
           color: Colors.white,
           fontWeight: FontWeight.w500,
         ),
-        tabIconColor: yellow2,
+        tabIconColor: CustomColors.yellow2.color,
         tabIconSize: 28.0,
         tabIconSelectedSize: 26.0,
-        tabSelectedColor: yellow,
+        tabSelectedColor: CustomColors.yellow.color,
         tabIconSelectedColor: Colors.black,
         tabBarColor: Colors.black,
         onTabItemSelected: (int value) {
@@ -281,7 +281,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                                     Text(
                                       "${data ?? 'boş title'}",
                                       style: GoogleFonts.rubik(
-                                        color: bluee,
+                                        color: CustomColors.blue.color,
                                         fontSize: genislik / 20,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -299,7 +299,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                                       child: Text(
                                         "${data ?? 'boş title'}",
                                         style: TextStyle(
-                                          color: bluee,
+                                          color: CustomColors.blue.color,
                                           fontSize: genislik / 25,
                                           fontWeight: FontWeight.bold,
                                         ),
