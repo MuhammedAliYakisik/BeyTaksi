@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:izmir_taksi/data/model/Taksi.dart';
-import 'package:izmir_taksi/ui/cubit/Anasayfa_Cubit.dart';
+import 'package:izmir_taksi/ui/cubit/Homepage_Cubit.dart';
 import 'package:izmir_taksi/ui/views/Taxi_Page.dart';
 import 'package:izmir_taksi/ui/views/Search_Page.dart';
 import 'package:izmir_taksi/ui/views/Settings_Page.dart';
@@ -16,18 +16,18 @@ import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
 
 
-class Anasayfa extends StatefulWidget {
-  const Anasayfa({super.key});
+class Homepage extends StatefulWidget {
+  const Homepage({super.key});
 
   @override
-  State<Anasayfa> createState() => _AnasayfaState();
+  State<Homepage> createState() => _HomepageState();
 }
 
-class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
-  MotionTabBarController? _motionTabBarController;
+class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
+  late final _motionTabBarController;
   bool _isLoading = false;
-  bool searchstate = false;
-  String searchword = "";
+  bool _isSearching  = false;
+  String _searchQuery  = "";
 
   Future<void> _changeloading() async {
     setState(() {
@@ -37,7 +37,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
 
   Future<void> search() async {
     setState(() {
-      searchstate = !searchstate;
+      _isSearching  = !_isSearching ;
     });
   }
 
@@ -54,7 +54,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
 
   Future<void> _fetchTaksi() async {
     await _changeloading();
-    await context.read<AnasayfaCubit>().fetchtaksi();
+    await context.read<Homepagecubit>().fetchtaksi();
     await _changeloading();
   }
 
@@ -62,6 +62,22 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     _motionTabBarController!.dispose();
+  }
+  void _toggleSearch() {
+    setState(() {
+      _isSearching = !_isSearching;
+      if (!_isSearching) {
+        _searchQuery = "";
+        context.read<Homepagecubit>().fetchtaksi();
+      }
+    });
+  }
+
+  void _updateSearchQuery(String query) {
+    setState(() {
+      _searchQuery = query;
+    });
+    context.read<Homepagecubit>().fetchsearch(query);
   }
 
   @override
@@ -72,124 +88,19 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: CustomColors.white.color,
-      appBar: searchstate
-          ? AppBar(
-        title: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  hintText: "Arama için birşey giriniz",hintStyle: TextStyle(
-                  color: Colors.black
-                ),
-                  icon: Icon(FontAwesomeIcons.taxi,color: Colors.black,),
-                ),
-                onChanged: (aramasonuc) {
-                  setState(() {
-                    searchword = aramasonuc;
-                  });
-                  context.read<AnasayfaCubit>().fetchsearch(aramasonuc);
-                },
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.cancel, color: Colors.black),
-              onPressed: () {
-                setState(() {
-                  searchstate = false;
-                  searchword = "";
-                });
-                context.read<AnasayfaCubit>().fetchtaksi();
-              },
-            ),
-          ],
-        ),
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-      )
-          : AppBar(
-        title: Text(
-          "~ Konya Taksi ~",
-          style: GoogleFonts.baskervville(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: genislik / 15,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(FontAwesomeIcons.magnifyingGlassLocation, color: Colors.black),
-            onPressed: () {
-              setState(() {
-                search();
-              });
-            },
-          ),
-        ],
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        leading: Padding(
-          padding: EdgeInsets.only(left: genislik / 35),
-          child: Image.asset("assets/taxi.png"),
-        ),
-      ),
-      bottomNavigationBar: MotionTabBar(
-        controller: _motionTabBarController,
-        initialSelectedTab: "Ana Sayfa",
-        labels: const ["Ana Sayfa", "Harita", "Ayarlar"],
-        icons: const [Icons.home, Icons.map_outlined, Icons.settings],
-        badges: null,
-        tabSize: 50,
-        tabBarHeight: 55,
-        textStyle: const TextStyle(
-          fontSize: 12,
-          color: Colors.white,
-          fontWeight: FontWeight.w500,
-        ),
-        tabIconColor: CustomColors.yellow2.color,
-        tabIconSize: 28.0,
-        tabIconSelectedSize: 26.0,
-        tabSelectedColor: CustomColors.yellow.color,
-        tabIconSelectedColor: Colors.black,
-        tabBarColor: Colors.black,
-        onTabItemSelected: (int value) {
-          setState(() {
-            _motionTabBarController!.index = value;
-          });
-        },
+      appBar: CustomAppBar(
+        isSearching: _isSearching ,
+        onSearchToggle: _toggleSearch,
+        onSearchQueryChanged: _updateSearchQuery,
       ),
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: _motionTabBarController,
         children: <Widget>[
-          BlocBuilder<AnasayfaCubit, AnasayfaState>(
+          BlocBuilder<Homepagecubit, AnasayfaState>(
             builder: (context, state) {
               if (state is TaksiLoading) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SpinKitFadingCircle(
-                        color: Colors.yellow,
-                        size: 50.0,
-                      ),
-                      SizedBox(height: uzunluk / 30),
-                      Text(
-                        'Veriler Yükleniyor...',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return _buildLoadingIndicator();
               } else if (state is TaksiLoaded) {
                 var allContents = state.taksi.data!
                     .expand((data) => data.subCategories ?? [])
@@ -258,7 +169,6 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                   },
                 );
               } else if (state is SearchResultsLoaded) {
-
                 return ListView.builder(
                   itemCount: state.searchResults.length,
                   itemBuilder: (context, index) {
@@ -309,7 +219,7 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                                     IconButton(
                                         onPressed: () {
                                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Searchpage(37.8667,32.5,""),));
-                                      
+
                                         },
                                         icon: FaIcon(FontAwesomeIcons.mapLocationDot)),
                                   ],
@@ -323,19 +233,147 @@ class _AnasayfaState extends State<Anasayfa> with TickerProviderStateMixin {
                   },
                 );
               } else if (state is TaksiError) {
-                return Center(
-                  child: Text("Hata: ${state.message}"),
-                );
+                return _buildErrorWidget("Hata: ${state.message}");
               } else {
-                return Center(child: Text("Veriler yüklenemedi."));
+                return _buildErrorWidget("Veriler Yüklenmedi");
               }
             },
           ),
-
           Searchpage(37.8667,32.5,""),
           const Settingspage(),
         ],
       ),
+      bottomNavigationBar: CustomBottomNavigation(
+        controller: _motionTabBarController,
+        onTabSelected: (index){
+          setState(() {
+            _motionTabBarController.index = index;
+          });
+        }
+      )
+    );
+  }
+  Widget _buildLoadingIndicator() {
+    var oran = MediaQuery.of(context);
+    var uzunluk = oran.size.height;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SpinKitFadingCircle(
+            color: Colors.yellow,
+            size: 50.0,
+          ),
+          SizedBox(height: uzunluk / 30),
+          Text(
+            'Veriler Yükleniyor...',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorWidget(String message) {
+    return Center(child: Text("Hata: $message"));
+  }
+}
+
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final bool isSearching;
+  final VoidCallback onSearchToggle;
+  final Function(String) onSearchQueryChanged;
+
+  const CustomAppBar({
+    Key? key,
+    required this.isSearching,
+    required this.onSearchToggle,
+    required this.onSearchQueryChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: isSearching
+          ? _buildSearchField()
+          : Text(
+        "~ Konya Taksi ~",
+        style: GoogleFonts.baskervville(
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+          fontSize: MediaQuery.of(context).size.width / 15,
+        ),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(isSearching ? Icons.close : FontAwesomeIcons.magnifyingGlassLocation, color: Colors.black),
+          onPressed: onSearchToggle,
+        ),
+      ],
+      elevation: 0,
+      centerTitle: true,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      backgroundColor: Colors.transparent,
+      leading: Padding(
+        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width / 35),
+        child: Image.asset("assets/taxi.png"),
+      ),
+    );
+  }
+
+  Widget _buildSearchField() {
+    return TextField(
+      textAlign: TextAlign.center,
+      decoration: InputDecoration(
+        hintText: "Arama için birşey giriniz",
+        hintStyle: TextStyle(color: Colors.black),
+        icon: Icon(FontAwesomeIcons.taxi, color: Colors.black),
+      ),
+      onChanged: onSearchQueryChanged,
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+
+class CustomBottomNavigation extends StatelessWidget {
+  final MotionTabBarController controller;
+  final Function(int) onTabSelected;
+
+  const CustomBottomNavigation({
+    Key? key,
+    required this.controller,
+    required this.onTabSelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MotionTabBar(
+      controller: controller,
+      initialSelectedTab: "Ana Sayfa",
+      labels: const ["Ana Sayfa", "Harita", "Ayarlar"],
+      icons: const [Icons.home, Icons.map_outlined, Icons.settings],
+      tabSize: 50,
+      tabBarHeight: 55,
+      textStyle: const TextStyle(
+        fontSize: 12,
+        color: Colors.white,
+        fontWeight: FontWeight.w500,
+      ),
+      tabIconColor: CustomColors.yellow2.color,
+      tabIconSize: 28.0,
+      tabIconSelectedSize: 26.0,
+      tabSelectedColor: CustomColors.yellow.color,
+      tabIconSelectedColor: Colors.black,
+      tabBarColor: Colors.black,
+      onTabItemSelected: onTabSelected,
     );
   }
 }

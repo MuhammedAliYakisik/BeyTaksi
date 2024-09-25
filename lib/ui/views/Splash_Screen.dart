@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izmir_taksi/ui/views/Ana_Sayfa.dart';
+import 'package:izmir_taksi/ui/views/Home_Page.dart';
 import 'package:izmir_taksi/utils/Color_Page.dart';
 
 class Splashscreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class _SplashscreenState extends State<Splashscreen> with TickerProviderStateMix
 
     Future.delayed(const Duration(seconds: 9), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Anasayfa()),
+        MaterialPageRoute(builder: (context) => const Homepage()),
       );
     });
 

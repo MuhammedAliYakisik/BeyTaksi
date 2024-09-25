@@ -22,10 +22,10 @@ class TaksiError extends AnasayfaState {
   TaksiError(this.message);
 }
 
-class AnasayfaCubit extends Cubit<AnasayfaState> {
+class Homepagecubit extends Cubit<AnasayfaState> {
   final TaksiRepo _repo;
 
-  AnasayfaCubit(this._repo) : super(TaksiLoading());
+  Homepagecubit(this._repo) : super(TaksiLoading());
 
   Future<void> fetchtaksi() async {
     emit(TaksiLoading());
